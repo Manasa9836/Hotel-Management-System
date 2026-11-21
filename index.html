@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HotelPro | Revenue Management</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"> <span>✦</span> HotelPro </div>
+    <p class="menu-label">MAIN MENU</p>
+    <nav>
+      <button class="nav active" data-page="dashboard">▦ Dashboard</button>
+      <button class="nav" data-page="rooms">▣ Room Management</button>
+      <button class="nav" data-page="bookings">▤ Bookings</button>
+      <button class="nav" data-page="expenses">▧ Expenses</button>
+      <button class="nav" data-page="analytics">◷ Analytics</button>
+      <button class="nav" data-page="reports">▥ Reports</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button id="themeBtn" class="nav">☾ Toggle dark mode</button>
+      <p>Hotel Revenue System<br><small>Frontend Demo v1.0</small></p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <p class="muted">Welcome to your hotel management dashboard</p>
+      </div>
+      <div class="top-actions">
+        <span class="admin">● Admin</span>
+        <button class="primary" onclick="openModal('booking')">+ New Booking</button>
+      </div>
+    </header>
+
+    <section id="dashboard" class="page active-page">
+      <div class="stats">
+        <article class="stat-card"><span>Total Revenue</span><h2 id="revenue">₹0</h2><small>Paid bookings</small></article>
+        <article class="stat-card"><span>Total Expenses</span><h2 id="expense">₹0</h2><small>Recorded expenses</small></article>
+        <article class="stat-card"><span>Net Profit</span><h2 id="profit">₹0</h2><small>Revenue minus expenses</small></article>
+        <article class="stat-card"><span>Occupancy Rate</span><h2 id="occupancy">0%</h2><small id="roomCount">0 rooms</small></article>
+      </div>
+
+      <div class="chart-grid">
+        <article class="panel">
+          <div class="panel-heading"><h3>Revenue Overview</h3><span class="muted">Monthly</span></div>
+          <canvas id="revenueChart"></canvas>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><h3>Revenue Distribution</h3></div>
+          <canvas id="distributionChart"></canvas>
+        </article>
+      </div>
+
+      <article class="panel">
+        <div class="panel-heading"><h3>Recent Bookings</h3><button class="link-btn" onclick="showPage('bookings')">View all</button></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Customer</th><th>Room</th><th>Check-in</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody id="recentBookings"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="rooms" class="page">
+      <div class="section-toolbar">
+        <div><h2>Room Management</h2><p class="muted">Manage room types, prices and availability.</p></div>
+        <button class="primary" onclick="openModal('room')">+ Add Room</button>
+      </div>
+      <div id="roomGrid" class="room-grid"></div>
+    </section>
+
+    <section id="bookings" class="page">
+      <div class="section-toolbar">
+        <div><h2>Bookings</h2><p class="muted">View and manage guest reservations.</p></div>
+        <button class="primary" onclick="openModal('booking')">+ Add Booking</button>
+      </div>
+      <input class="search" id="bookingSearch" placeholder="Search customer or room..." oninput="renderBookings()">
+      <article class="panel">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Customer</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Amount</th><th>Payment</th><th>Action</th></tr></thead>
+            <tbody id="bookingTable"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="expenses" class="page">
+      <div class="section-toolbar">
+        <div><h2>Expenses</h2><p class="muted">Track hotel operating costs.</p></div>
+        <button class="primary" onclick="openModal('expense')">+ Add Expense</button>
+      </div>
+      <article class="panel">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Expense</th><th>Date</th><th>Amount</th><th>Action</th></tr></thead>
+            <tbody id="expenseTable"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section id="analytics" class="page">
+      <div class="section-toolbar">
+        <div><h2>Analytics</h2><p class="muted">Understand your hotel's financial performance.</p></div>
+      </div>
+      <div class="stats">
+        <article class="stat-card"><span>Average Booking Value</span><h2 id="averageBooking">₹0</h2></article>
+        <article class="stat-card"><span>Total Bookings</span><h2 id="totalBookings">0</h2></article>
+        <article class="stat-card"><span>Paid Bookings</span><h2 id="paidBookings">0</h2></article>
+      </div>
+      <article class="panel">
+        <h3>Monthly Revenue and Expenses</h3>
+        <canvas id="analyticsChart"></canvas>
+      </article>
+    </section>
+
+    <section id="reports" class="page">
+      <div class="section-toolbar">
+        <div><h2>Reports</h2><p class="muted">Export your sample hotel records.</p></div>
+      </div>
+      <div class="report-grid">
+        <article class="panel">
+          <h3>Booking Report</h3>
+          <p class="muted">Download all booking records as a CSV file.</p>
+          <button class="primary" onclick="exportCSV('bookings')">Download Bookings CSV</button>
+        </article>
+        <article class="panel">
+          <h3>Expense Report</h3>
+          <p class="muted">Download all expense records as a CSV file.</p>
+          <button class="primary" onclick="exportCSV('expenses')">Download Expenses CSV</button>
+        </article>
+        <article class="panel">
+          <h3>Room Report</h3>
+          <p class="muted">Download room details and availability.</p>
+          <button class="primary" onclick="exportCSV('rooms')">Download Rooms CSV</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <div class="modal-heading">
+        <h2 id="modalTitle">Add Record</h2>
+        <button class="close-btn" onclick="closeModal()">×</button>
+      </div>
+      <form id="recordForm">
+        <div id="formFields"></div>
+        <div class="modal-actions">
+          <button type="button" class="secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="primary">Save Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="js/script.js"></script>
+</body>
+</html>
