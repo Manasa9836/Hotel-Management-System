@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian RMS – Hotel Revenue Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+  <div class="brand">Meridian RMS<small>Revenue management</small></div>
+  <nav id="nav"></nav>
+</aside>
+<main id="view"></main>
+<dialog id="dlg">
+  <h3>New booking</h3>
+  <label for="f-guest">Guest name</label><input id="f-guest">
+  <label for="f-type">Room type</label><select id="f-type"></select>
+  <label for="f-in">Check-in</label><input id="f-in" type="date">
+  <label for="f-n">Nights</label><input id="f-n" type="number" min="1" max="30" value="1">
+  <label for="f-ch">Channel</label><select id="f-ch"></select>
+  <div class="bar" style="margin-top:14px"><button id="f-save">Save booking</button><button class="alt" id="f-cancel">Close</button></div>
+</dialog>
+<div id="toast" role="status"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
